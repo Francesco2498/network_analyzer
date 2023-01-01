@@ -1,0 +1,31 @@
+[package]
+name = "network_analyzer"
+version = "0.1.0"
+description = "A network analyzer to sniff traffic. PdS Project for Polito"
+authors = ["Cianflone Claudia", "Cirone Salvatore", "Russo Francesco"]
+edition = "2021"
+rust-version = "1.59"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.2.1", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+tauri = { version = "1.2.2", features = [] }
+prettytable-rs = "^0.9"
+pktparse = "0.7.1"
+pcap = "0.11.0"
+chrono = "0.4"
+libc = "*"
+csv = "1.1"
+serde = { version = "1.0.147", features = ["derive"] }
+
+[features]
+# by default Tauri runs in production mode
+# when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
+default = [ "custom-protocol" ]
+# this feature is used for production builds where `devPath` points to the filesystem
+# DO NOT remove this
+custom-protocol = [ "tauri/custom-protocol" ]

@@ -1,0 +1,1 @@
+export type RecordingStatus = 'IDLE' | 'REC' | 'PAUSED' ;
