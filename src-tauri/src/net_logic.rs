@@ -360,6 +360,9 @@ pub mod sniffer {
                     if self.get_device().is_none() {
                         return Err(NetworkAnalyzerError::UserError("Missing device".to_string()));
                     }
+                    
+                    // Reset hashmap to erase history
+                    self.hashmap.lock().unwrap().clear();
 
                     self.set_status(Status::Running);
                     let device = self.get_device().clone().unwrap();
@@ -370,7 +373,7 @@ pub mod sniffer {
                     thread::spawn(move || {
                         println!("RUN THREAD START");
                         let cloned_device = device.clone();
-                        let mut cap = Capture::from_device(cloned_device.clone()).unwrap().promisc(true).open().unwrap();
+                        let mut cap = Capture::from_device(cloned_device.clone()).unwrap().timeout(10).promisc(true).open().unwrap();
 
                         loop {
                             let mut status = tuple.0.lock().unwrap();
