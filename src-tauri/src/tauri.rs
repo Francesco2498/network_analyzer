@@ -99,6 +99,8 @@ pub mod frontend_api {
   pub fn start_sniffer(sniffer: State<SnifferState>) -> Result<String, String> {
     let mut sniffer = sniffer.0.lock().unwrap();
 
+    println!("API: executing START SNIFFER command");
+
     if sniffer.get_status() == Status::Idle {
       match sniffer.run() {
         Ok(_) => Ok(String::from("OK. Sniffer Started")),
@@ -118,9 +120,13 @@ pub mod frontend_api {
   
   #[tauri::command]
   pub fn stop_sniffer(sniffer: State<SnifferState>) -> Result<String, String> {
-    let mut sniffer = sniffer.0.lock().unwrap();
 
+    println!("API: executing STOP SNIFFER command");
+
+    let mut sniffer = sniffer.0.lock().unwrap();
     let result = sniffer.stop();
+
+    println!("API: successfully executed STOP SNIFFER command");
 
     match result {
       Ok(_) => Ok(String::from("OK. Sniffer Stopped.")),
@@ -130,13 +136,18 @@ pub mod frontend_api {
 
   #[tauri::command]
   pub fn pause_sniffer(sniffer: State<SnifferState>) -> Result<String, String> {
+
+    println!("API: executing PAUSE SNIFFER command");
+
     let mut sniffer = sniffer.0.lock().unwrap();
 
     let result = sniffer.wait();
+    
+    println!("API: successfully executed PAUSE SNIFFER command");
 
     match result {
       Ok(_) => Ok(String::from("OK. Sniffer Paused.")),
-      Err(_) => Err(String::from("Error. Could not stop the sniffer"))
+      Err(_) => Err(String::from("Error. Could not pause the sniffer"))
     }
   }
 
