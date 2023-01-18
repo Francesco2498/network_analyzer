@@ -92,6 +92,12 @@
     // First Stop Sniffer if active
     if (status.value !== 'IDLE'){
       await BackendAPI.stopSniffer();
+
+      // Optionally clear timerId
+      if (timerId.value !== null){
+        clearInterval(timerId.value);
+        timerId.value = null;
+      }
     }
    
     // Change view

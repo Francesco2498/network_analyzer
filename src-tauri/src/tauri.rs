@@ -3,7 +3,7 @@ pub mod frontend_api {
 
   use pcap::{Device};
   use serde::Serialize;
-  use crate::sniffer::{Sniffer, Status, Protocol, Direction};
+  use crate::sniffer::{Sniffer, Status, Protocol, Direction, NetworkAnalyzerError};
   use tauri::State;
   use std::{sync::{Mutex, Arc}, collections::HashMap};
 
@@ -201,11 +201,21 @@ pub mod frontend_api {
   pub fn generate_report(file_name: String, sniffer: State<SnifferState>) -> Result<(), String> {
     let mut sniffer = sniffer.0.lock().unwrap();
     
-    sniffer.stop().unwrap();
-    sniffer.set_file(file_name).unwrap();
-    sniffer.generate_report().unwrap();
+    match sniffer.stop() {
+      Ok(()) => {
+        sniffer.set_file(file_name).unwrap();
+        sniffer.generate_report().unwrap();
 
-    return Ok(())
+        return Ok(())
+      },
+      Err(error) => {
+        match error {
+          NetworkAnalyzerError::UserWarning(_) => return Ok(()),
+          _ => return Err(error.to_string())
+        }
+      }
+    }
+
   }
 
 }

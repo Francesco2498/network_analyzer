@@ -373,7 +373,7 @@ pub mod sniffer {
                     thread::spawn(move || {
                         println!("RUN THREAD START");
                         let cloned_device = device.clone();
-                        let mut cap = Capture::from_device(cloned_device.clone()).unwrap().timeout(10).promisc(true).open().unwrap();
+                        let mut cap = Capture::from_device(cloned_device.clone()).unwrap().timeout(100).promisc(true).open().unwrap();
 
                         loop {
                             let mut status = tuple.0.lock().unwrap();
@@ -421,8 +421,8 @@ pub mod sniffer {
                                     break;
                                 }
                             }
-                            thread::sleep(Duration::from_millis(10));
                             drop(status);
+                            thread::sleep(Duration::from_millis(100));
                         };
                     });
 
