@@ -110,6 +110,9 @@
 
     // Starting Backend Sniffer
     await BackendAPI.generateReport(reportPath.value);
+
+    // Set status to IDLE
+    status.value = 'IDLE'
   }
 
 </script>
